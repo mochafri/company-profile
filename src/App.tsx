@@ -106,12 +106,14 @@ export default function App() {
       wordInterval = setInterval(rotateText, 3800);
     }
 
-    // 3. Infinite Ambient Background Blobs floating animation
+    // 3. Infinite Ambient Background Blobs floating & color shifting animations
     gsap.to('.ambient-blob-1', {
       x: '25vw',
       y: '15vh',
-      scale: 1.15,
-      duration: 22,
+      scale: 1.2,
+      backgroundColor: '#311042', // shift from teal to deep purple
+      opacity: 0.38,
+      duration: 12,
       repeat: -1,
       yoyo: true,
       ease: 'sine.inOut',
@@ -121,7 +123,9 @@ export default function App() {
       x: '-20vw',
       y: '-10vh',
       scale: 0.85,
-      duration: 26,
+      backgroundColor: '#581c2f', // shift from slate blue to deep burgundy
+      opacity: 0.42,
+      duration: 15,
       repeat: -1,
       yoyo: true,
       ease: 'sine.inOut',
@@ -130,14 +134,39 @@ export default function App() {
     gsap.to('.ambient-blob-3', {
       x: '15vw',
       y: '-20vh',
-      scale: 1.1,
-      duration: 19,
+      scale: 1.15,
+      backgroundColor: '#e1b7c8', // shift from mint to rose lavender
+      opacity: 0.35,
+      duration: 13,
       repeat: -1,
       yoyo: true,
       ease: 'sine.inOut',
     });
 
-    // 4. Scroll-Triggered: Feature Columns
+    // 4. Infinite Floating and Rotating Background SVG Geometric shapes
+    const bgShapes = gsap.utils.toArray<HTMLElement>('.bg-shape');
+    bgShapes.forEach((shape, index) => {
+      gsap.to(shape, {
+        x: index % 2 === 0 ? '+=45' : '-=45',
+        y: index % 3 === 0 ? '+=60' : '-=60',
+        rotation: index % 2 === 0 ? 360 : -360,
+        duration: 18 + index * 4,
+        repeat: -1,
+        yoyo: true,
+        ease: 'sine.inOut',
+        delay: index * 0.2,
+      });
+    });
+
+    // 5. Infinite Scrolling Logo Marquee
+    gsap.to('.marquee-content', {
+      xPercent: -50,
+      ease: 'none',
+      duration: 20, // 20s for a smooth, relaxed loop speed
+      repeat: -1,
+    });
+
+    // 6. Scroll-Triggered: Feature Columns
     gsap.from('.feature-column', {
       scrollTrigger: {
         trigger: '.feature-column',
@@ -151,7 +180,7 @@ export default function App() {
       ease: 'power2.out',
     });
 
-    // 5. Scroll-Triggered: Services Header & Cards
+    // 7. Scroll-Triggered: Services Header & Cards
     gsap.from('.services-header', {
       scrollTrigger: {
         trigger: '.services-header',
@@ -176,7 +205,7 @@ export default function App() {
       ease: 'power3.out',
     });
 
-    // 6. Scroll-Triggered: Testimonial & Counters
+    // 8. Scroll-Triggered: Testimonial & Counters
     gsap.from('.testimonial-header', {
       scrollTrigger: {
         trigger: '.testimonial-header',
@@ -221,7 +250,7 @@ export default function App() {
       });
     });
 
-    // 7. Scroll-Triggered: CTA Section
+    // 9. Scroll-Triggered: CTA Section
     gsap.from('.cta-content', {
       scrollTrigger: {
         trigger: '.cta-section',
@@ -235,7 +264,7 @@ export default function App() {
       ease: 'power2.out',
     });
 
-    // 8. Magnetic Button Interactive Effect
+    // 10. Magnetic Button Interactive Effect
     const magneticButtons = gsap.utils.toArray<HTMLElement>('.btn-magnetic');
     const moveHandlers = new Map<HTMLElement, (e: MouseEvent) => void>();
     const leaveHandlers = new Map<HTMLElement, () => void>();
@@ -316,15 +345,51 @@ export default function App() {
   return (
     <div ref={containerRef} className="min-h-screen relative bg-surface text-on-surface font-body-md antialiased overflow-x-hidden selection:bg-primary-container selection:text-on-primary">
       
-      {/* 🌌 Premium Ambient Background Elements (Floating Blobs & Dot Grid Pattern) */}
+      {/* 🌌 Premium Ambient Background Elements (Floating Blobs & Dot Grid Pattern & Floating SVG shapes) */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
-        {/* Soft Blurred Orbs */}
-        <div className="ambient-blob-1 absolute top-[-5%] left-[-10%] w-[450px] h-[450px] rounded-full bg-primary-container/20 dark:bg-primary-container/10 blur-[120px]" />
-        <div className="ambient-blob-2 absolute top-[35%] right-[-10%] w-[550px] h-[550px] rounded-full bg-tertiary-fixed/30 dark:bg-tertiary-fixed/15 blur-[140px]" />
-        <div className="ambient-blob-3 absolute bottom-[10%] left-[15%] w-[500px] h-[500px] rounded-full bg-primary-fixed-dim/20 dark:bg-primary-fixed-dim/10 blur-[130px]" />
+        {/* Soft Blurred Orbs with dynamic color-shifting background colors */}
+        <div className="ambient-blob-1 absolute top-[-10%] left-[-10%] w-[600px] h-[600px] rounded-full blur-[130px]" style={{ backgroundColor: '#064e3b', opacity: 0.28 }} />
+        <div className="ambient-blob-2 absolute top-[30%] right-[-10%] w-[700px] h-[700px] rounded-full blur-[150px]" style={{ backgroundColor: '#35455a', opacity: 0.32 }} />
+        <div className="ambient-blob-3 absolute bottom-[5%] left-[10%] w-[650px] h-[650px] rounded-full blur-[140px]" style={{ backgroundColor: '#95d3ba', opacity: 0.25 }} />
         
         {/* Subtle Modern Dot Grid Mask */}
         <div className="absolute inset-0 opacity-[0.035] dark:opacity-[0.015] bg-[radial-gradient(#131b2e_1px,transparent_1px)] dark:bg-[radial-gradient(#ffffff_1px,transparent_1px)] [background-size:24px_24px]" />
+
+        {/* 🎨 Floating Vector Geometric SVG Wireframes */}
+        {/* Concentric Circles Grid */}
+        <svg className="bg-shape absolute top-[12%] left-[8%] w-32 h-32 opacity-20 dark:opacity-10 pointer-events-none" viewBox="0 0 100 100">
+          <circle cx="50" cy="50" r="40" stroke="currentColor" strokeWidth="0.5" fill="none" className="text-primary-container" strokeDasharray="4 4" />
+          <circle cx="50" cy="50" r="25" stroke="currentColor" strokeWidth="0.5" fill="none" className="text-primary" />
+        </svg>
+
+        {/* Floating Wavy Sine Wave Path */}
+        <svg className="bg-shape absolute top-[28%] right-[15%] w-64 h-24 opacity-25 dark:opacity-10 pointer-events-none" viewBox="0 0 200 60">
+          <path d="M 0,30 Q 25,5 50,30 T 100,30 T 150,30 T 200,30" fill="none" stroke="currentColor" strokeWidth="1" className="text-primary-container" strokeDasharray="3 3" />
+        </svg>
+
+        {/* Floating Cross/Plus Sign */}
+        <svg className="bg-shape absolute top-[48%] left-[78%] w-12 h-12 opacity-30 dark:opacity-15 pointer-events-none" viewBox="0 0 24 24">
+          <path d="M12 4v16m-8-8h16" stroke="currentColor" strokeWidth="1" strokeLinecap="round" className="text-primary" />
+        </svg>
+
+        {/* Large Grid Mesh */}
+        <svg className="bg-shape absolute top-[68%] left-[10%] w-48 h-48 opacity-15 dark:opacity-5 pointer-events-none" viewBox="0 0 100 100">
+          <line x1="10" y1="10" x2="90" y2="10" stroke="currentColor" strokeWidth="0.5" className="text-primary-container" />
+          <line x1="10" y1="30" x2="90" y2="30" stroke="currentColor" strokeWidth="0.5" className="text-primary-container" />
+          <line x1="10" y1="50" x2="90" y2="50" stroke="currentColor" strokeWidth="0.5" className="text-primary-container" />
+          <line x1="10" y1="70" x2="90" y2="70" stroke="currentColor" strokeWidth="0.5" className="text-primary-container" />
+          <line x1="10" y1="90" x2="90" y2="90" stroke="currentColor" strokeWidth="0.5" className="text-primary-container" />
+          <line x1="10" y1="10" x2="10" y2="90" stroke="currentColor" strokeWidth="0.5" className="text-primary-container" />
+          <line x1="30" y1="10" x2="30" y2="90" stroke="currentColor" strokeWidth="0.5" className="text-primary-container" />
+          <line x1="50" y1="10" x2="50" y2="90" stroke="currentColor" strokeWidth="0.5" className="text-primary-container" />
+          <line x1="70" y1="10" x2="70" y2="90" stroke="currentColor" strokeWidth="0.5" className="text-primary-container" />
+          <line x1="90" y1="10" x2="90" y2="90" stroke="currentColor" strokeWidth="0.5" className="text-primary-container" />
+        </svg>
+
+        {/* Floating Hexagon Wireframe */}
+        <svg className="bg-shape absolute bottom-[15%] right-[8%] w-24 h-24 opacity-20 dark:opacity-10 pointer-events-none" viewBox="0 0 100 100">
+          <polygon points="50,10 90,30 90,70 50,90 10,70 10,30" fill="none" stroke="currentColor" strokeWidth="0.75" className="text-primary" />
+        </svg>
       </div>
 
       {/* TopNavBar */}
@@ -464,7 +529,7 @@ export default function App() {
                 <span className="rotating-text inline-block text-primary-container">Bisnis Global</span>
               </span>
             </h1>
-            <p className="hero-reveal font-body-lg text-body-lg text-on-surface-variant max-w-2xl mb-stack-lg">
+            <p className="hero-reveal text-body-md md:text-body-lg text-on-surface-variant max-w-2xl mb-stack-lg">
               StratisGlobal adalah mitra strategis Anda dalam menavigasi kompleksitas pasar modern. Kami menggabungkan wawasan mendalam dengan eksekusi presisi untuk mendorong pertumbuhan berkelanjutan dan inovasi.
             </p>
             <div className="hero-reveal flex gap-4 mb-stack-lg">
@@ -513,12 +578,78 @@ export default function App() {
           </div>
         </section>
 
+        {/* Partners Section (Infinite Looping Logo Marquee) */}
+        <section className="my-16 md:my-24 py-12 bg-surface-container-low/40 backdrop-blur-sm border-y border-outline-variant/20 overflow-hidden relative w-full z-20">
+          <div className="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop text-center mb-6">
+            <p className="font-label-caps text-label-caps text-on-surface-variant tracking-widest uppercase opacity-75">Mitra Strategis yang Memercayai Kami</p>
+          </div>
+          
+          <div className="marquee-container flex overflow-hidden w-full relative select-none">
+            {/* Fade overlays for smooth edges */}
+            <div className="absolute top-0 left-0 h-full w-24 bg-gradient-to-r from-surface via-surface/40 to-transparent z-10 pointer-events-none" />
+            <div className="absolute top-0 right-0 h-full w-24 bg-gradient-to-l from-surface via-surface/40 to-transparent z-10 pointer-events-none" />
+            
+            <div className="marquee-content flex gap-20 md:gap-28 items-center shrink-0">
+              <div className="flex items-center gap-2 text-on-surface-variant font-semibold text-lg opacity-65">
+                <span className="material-symbols-outlined text-[28px] text-primary">domain</span>
+                Nusantara Holdings
+              </div>
+              <div className="flex items-center gap-2 text-on-surface-variant font-semibold text-lg opacity-65">
+                <span className="material-symbols-outlined text-[28px] text-primary">sailing</span>
+                Samudra Group
+              </div>
+              <div className="flex items-center gap-2 text-on-surface-variant font-semibold text-lg opacity-65">
+                <span className="material-symbols-outlined text-[28px] text-primary">filter_hdr</span>
+                Mahameru Digital
+              </div>
+              <div className="flex items-center gap-2 text-on-surface-variant font-semibold text-lg opacity-65">
+                <span className="material-symbols-outlined text-[28px] text-primary">account_balance_wallet</span>
+                Nusa Dua Capital
+              </div>
+              <div className="flex items-center gap-2 text-on-surface-variant font-semibold text-lg opacity-65">
+                <span className="material-symbols-outlined text-[28px] text-primary">bolt</span>
+                Arwana Tech
+              </div>
+              <div className="flex items-center gap-2 text-on-surface-variant font-semibold text-lg opacity-65">
+                <span className="material-symbols-outlined text-[28px] text-primary">flight</span>
+                Lombok Air
+              </div>
+
+              {/* Duplicated set for seamless infinite loop */}
+              <div className="flex items-center gap-2 text-on-surface-variant font-semibold text-lg opacity-65">
+                <span className="material-symbols-outlined text-[28px] text-primary">domain</span>
+                Nusantara Holdings
+              </div>
+              <div className="flex items-center gap-2 text-on-surface-variant font-semibold text-lg opacity-65">
+                <span className="material-symbols-outlined text-[28px] text-primary">sailing</span>
+                Samudra Group
+              </div>
+              <div className="flex items-center gap-2 text-on-surface-variant font-semibold text-lg opacity-65">
+                <span className="material-symbols-outlined text-[28px] text-primary">filter_hdr</span>
+                Mahameru Digital
+              </div>
+              <div className="flex items-center gap-2 text-on-surface-variant font-semibold text-lg opacity-65">
+                <span className="material-symbols-outlined text-[28px] text-primary">account_balance_wallet</span>
+                Nusa Dua Capital
+              </div>
+              <div className="flex items-center gap-2 text-on-surface-variant font-semibold text-lg opacity-65">
+                <span className="material-symbols-outlined text-[28px] text-primary">bolt</span>
+                Arwana Tech
+              </div>
+              <div className="flex items-center gap-2 text-on-surface-variant font-semibold text-lg opacity-65">
+                <span className="material-symbols-outlined text-[28px] text-primary">flight</span>
+                Lombok Air
+              </div>
+            </div>
+          </div>
+        </section>
+
         {/* Services Section (Masonry Grid) */}
         <section className="py-section-gap bg-transparent" id="services">
           <div className="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop">
             <div className="services-header text-center mb-stack-lg max-w-3xl mx-auto">
               <h2 className="font-display-lg-mobile text-display-lg-mobile md:font-display-lg md:text-display-lg text-on-surface mb-stack-sm">Solusi Inti untuk Pertumbuhan Modern</h2>
-              <p className="font-body-lg text-body-lg text-on-surface-variant">
+              <p className="text-body-md md:text-body-lg text-on-surface-variant">
                 Layanan komprehensif yang dirancang untuk menjaga organisasi Anda tetap efisien, terorganisir, dan bergerak maju di pasar yang dinamis.
               </p>
             </div>
@@ -529,7 +660,7 @@ export default function App() {
                 <img alt="Corporate Transformation" className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDZ6MKrAP67UW3gT96D2qzmcspEiIjqs2Dy_8Z_bxusb8rla3X_GLFd0odUJdklCEYTPLzlhnTLOM8koosqVy9nWc-1TbRQRSUBCIkzx8hllT0Wwf85YBpmQbugpQeFBbEh60LqFJgNufpC0fK8Utm9590ybJUXuOnuT0SZdfpHntu_NCAtoUvuy0-rgXLl_xG94lSt1SURE6XBbkqjLWBtTTUUav59WMaGnrlGRTtEvXsdx05d_shz_HYJrccyYjusCwQ9mq70tMI" />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent"></div>
                 <div className="absolute bottom-0 left-0 p-stack-lg z-10 w-full">
-                  <h3 className="font-headline-md text-headline-md text-white mb-stack-sm">Transformasi Korporasi</h3>
+                  <h3 className="text-headline-sm md:text-headline-md text-white mb-stack-sm">Transformasi Korporasi</h3>
                   <p className="font-body-md text-body-md text-white/90 max-w-md">
                     Merestrukturisasi operasi CORE untuk meningkatkan efisiensi, kelincahan, dan kesiapan masa depan di pasar yang bergejolak.
                   </p>
@@ -563,7 +694,7 @@ export default function App() {
                 <div className="absolute inset-0 bg-primary-container/95 z-0"></div>
                 <img alt="Tech Integration" className="absolute inset-0 w-full h-full object-cover mix-blend-overlay opacity-40 group-hover:scale-105 transition-transform duration-700" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAa10A6_ojMv_JBJYhUV2QuVfBOKw5M61pkHs50FvNw2HUVzpNTvE6v9M75Kt2aJUVIWh9j_eG_rzSHPTz5ukhFXNl2p77joftOfoKZMCCcnLmTY0IitBU931zXBFw3Cie-N8Of78Q5ApWhy57RagCm4L2UIJ_TkxihUUOeC5rT-vdUn8c53LwJP29dFxl1CPvXiBfVbB0ZZ_TxzetZ6FaP8ny6sIrdonhlgNOStsdjWP-oXKW11Tg8-a122jJmja-fzB-_ISrsUm8" />
                 <div className="absolute bottom-0 left-0 p-stack-lg z-10 w-full">
-                  <h3 className="font-headline-md text-headline-md text-white mb-stack-sm">Integrasi Teknologi</h3>
+                  <h3 className="text-headline-sm md:text-headline-md text-white mb-stack-sm">Integrasi Teknologi</h3>
                   <p className="font-body-md text-body-md text-white/90 max-w-md">
                     Menjembatani sistem lama dengan solusi digital inovatif, memastikan infrastruktur teknologi yang lancar, aman, dan dapat diskalakan.
                   </p>
@@ -577,7 +708,7 @@ export default function App() {
         <section className="py-section-gap bg-transparent">
           <div className="max-w-4xl mx-auto px-margin-mobile md:px-margin-desktop text-center">
             <h2 className="testimonial-header font-display-lg-mobile text-display-lg-mobile md:font-display-lg md:text-display-lg text-on-surface mb-stack-sm">Hasil Terbukti, Dampak Nyata</h2>
-            <p className="testimonial-header font-body-lg text-body-lg text-on-surface-variant mb-section-gap">
+            <p className="testimonial-header text-body-md md:text-body-lg text-on-surface-variant mb-section-gap">
               Lihat bagaimana tim di seluruh dunia bekerja lebih efisien dengan keahlian manajemen komprehensif kami.
             </p>
 
@@ -620,7 +751,7 @@ export default function App() {
             <h2 className="font-display-lg-mobile text-display-lg-mobile md:font-display-lg md:text-display-lg mb-stack-md text-white">
               Siap Mengubah Masa Depan Anda?
             </h2>
-            <p className="font-body-lg text-body-lg text-tertiary-fixed-dim mb-stack-lg">
+            <p className="text-body-md md:text-body-lg text-tertiary-fixed-dim mb-stack-lg">
               Jadwalkan konsultasi eksekutif hari ini untuk mendiskusikan bagaimana StratisGlobal dapat menyelaraskan dengan visi strategis Anda.
             </p>
             <a className="btn-magnetic bg-primary-fixed text-on-primary-fixed font-button text-button px-8 py-4 rounded-full text-center hover:bg-primary-fixed-dim transition-colors shadow-sm inline-flex items-center justify-center gap-2" href="#">
